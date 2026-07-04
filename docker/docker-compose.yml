@@ -1,0 +1,86 @@
+services:
+
+  # ── PostgreSQL (metadata cho Hive + Airflow sau này) ──────────────
+  postgres:
+    image: postgres:15
+    container_name: lakehouse-postgres
+    environment:
+      POSTGRES_USER: lakehouse
+      POSTGRES_PASSWORD: lakehouse123
+      POSTGRES_DB: metastore
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "lakehouse"]
+      interval: 5s
+      retries: 5
+
+  # ── MinIO (S3-compatible storage) ─────────────────────────────────
+  minio:
+    image: minio/minio:latest
+    container_name: lakehouse-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      retries: 5
+
+  # ── MinIO Setup (tự tạo buckets khi start) ────────────────────────
+  minio-setup:
+    image: minio/mc:latest
+    container_name: lakehouse-minio-setup
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 minioadmin minioadmin123;
+      mc mb --ignore-existing local/lakehouse;
+      mc mb --ignore-existing local/lakehouse/bronze;
+      mc mb --ignore-existing local/lakehouse/silver;
+      mc mb --ignore-existing local/lakehouse/gold;
+      mc mb --ignore-existing local/lakehouse/models;
+      mc policy set readwrite local/lakehouse;
+      echo 'Buckets created successfully';
+      "
+
+  # ── Spark Master ──────────────────────────────────────────────────
+  spark-master:
+    image: apache/spark:3.5.1
+    container_name: lakehouse-spark-master
+    environment:
+      SPARK_MODE: master
+      SPARK_MASTER_HOST: spark-master
+      SPARK_RPC_AUTHENTICATION_ENABLED: "no"
+      SPARK_RPC_ENCRYPTION_ENABLED: "no"
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+
+  # ── Spark Worker ──────────────────────────────────────────────────
+  spark-worker:
+    image: apache/spark:3.5.1
+    container_name: lakehouse-spark-worker
+    environment:
+      SPARK_MODE: worker
+      SPARK_MASTER_URL: spark://spark-master:7077
+      SPARK_WORKER_MEMORY: 2G
+      SPARK_WORKER_CORES: 2
+      SPARK_RPC_AUTHENTICATION_ENABLED: "no"
+      SPARK_RPC_ENCRYPTION_ENABLED: "no"
+    depends_on:
+      - spark-master
+
+volumes:
+  postgres_data:
+  minio_data:
