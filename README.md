@@ -94,7 +94,7 @@ Dataset Source:
 
 https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
 
-<img width="2486" height="1496" alt="Dataset" src="https://github.com/user-attachments/assets/99f00a65-dc99-42a2-b156-39f5052efaa6" />
+<img width="2486" height="1496" alt="Dataset" src="https://github.com/user-attachments/assets/cdfe144c-d2a9-48a1-b26f-69c69daf212b" />
 
 ---
 
@@ -154,7 +154,7 @@ The processed Gold tables are loaded into PostgreSQL and visualized using Apache
 
 ## 📈 Business Overview Dashboard
 
-<img width="999" height="701" alt="Screenshot 2026-07-05 at 00 28 02" src="https://github.com/user-attachments/assets/a02626d1-05df-435d-a4fc-164be8c2b4d0" />
+<img width="999" height="701" alt="Screenshot 2026-07-05 at 00 28 02" src="https://github.com/user-attachments/assets/82332e19-b739-4c67-a0cf-1098a051643d" />
 
 ### Key Insights
 
@@ -169,7 +169,7 @@ The dashboard provides an overall view of business performance through revenue t
 
 ## 👥 Customer Analytics Dashboard
 
-<img width="824" height="800" alt="Screenshot 2026-07-05 at 00 28 17" src="https://github.com/user-attachments/assets/47a33b5b-399b-4661-be00-fff9e5134d6c" />
+<img width="824" height="800" alt="Screenshot 2026-07-05 at 00 28 17" src="https://github.com/user-attachments/assets/cafbf5a1-88c8-455c-80c2-20901bd1452f" />
 
 ### Key Insights
 
@@ -183,7 +183,7 @@ Although repeat customers represent a relatively small portion of the customer b
 
 ## 📦 Product Performance Dashboard
 
-<img width="824" height="675" alt="Screenshot 2026-07-05 at 00 28 27" src="https://github.com/user-attachments/assets/b2f1331c-3c7a-4af7-871e-2e21a547f1e2" />
+<img width="824" height="675" alt="Screenshot 2026-07-05 at 00 28 27" src="https://github.com/user-attachments/assets/f0bfd27d-6650-42f3-a663-7aa0eb509cc0" />
 
 ### Key Insights
 
